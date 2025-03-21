@@ -3,6 +3,9 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Home from "./pages/Home"; // Crearemos esta página de ejemplo
 import Store from "./pages/Store";
+import Cart from "./pages/Cart";
+
+
 
 function App() {
   return (
@@ -12,6 +15,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/store" element={<Store />} />
+        <Route path="/cart" element={<Cart />} />
       </Routes>
     </Router>
   );

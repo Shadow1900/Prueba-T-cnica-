@@ -68,6 +68,10 @@ const Store = () => {
         <h1 style={styles.title}>Tienda de Pokémon</h1>
         <div style={styles.cartSection}>
           <span style={styles.cartIcon}>🛒</span>
+          <button style={styles.cartButton} onClick={() => navigate("/cart")}>
+          🛒 Ver Carrito
+          </button>
+
           <span style={styles.cartCount}>{cart.length}</span>
         </div>
       </div>
@@ -230,6 +234,8 @@ const styles = {
     fontSize: "1.2rem",
     fontWeight: "bold",
   },
+  
+  
 };
 
 export default Store;

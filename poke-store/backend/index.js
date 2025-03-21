@@ -123,6 +123,22 @@ app.post("/api/cart", (req, res) => {
   });
 });
 
+app.get("/api/cart", (req, res) => {
+  const email = req.query.email;
+  if (!email) {
+    return res.status(400).json({ error: "Falta el email" });
+  }
+
+  const sql = "SELECT * FROM cart_items WHERE user_email = ?";
+  db.query(sql, [email], (err, results) => {
+    if (err) {
+      console.error("Error al obtener el carrito:", err);
+      return res.status(500).json({ error: "Error en el servidor" });
+    }
+    res.json(results);
+  });
+});
+
 
 
 // Iniciar servidor
