@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -26,21 +25,22 @@ const Cart = () => {
     fetchCart();
   }, [navigate]);
 
-  const calculateSubtotal = () => {
+  // Calcular el subtotal, impuestos y total usando useMemo
+  const subtotal = useMemo(() => {
     return cartItems.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
-  };
+  }, [cartItems]);
 
-  const calculateTax = () => {
-    return (calculateSubtotal() * 0.16).toFixed(2); // 16% de impuestos
-  };
+  const tax = useMemo(() => {
+    return (subtotal * 0.16).toFixed(2); // 16% de impuestos
+  }, [subtotal]);
 
-  const calculateTotal = () => {
-    return (parseFloat(calculateSubtotal()) + parseFloat(calculateTax())).toFixed(2);
-  };
+  const total = useMemo(() => {
+    return (parseFloat(subtotal) + parseFloat(tax)).toFixed(2);
+  }, [subtotal, tax]);
 
   const handleQuantityChange = async (id, newQuantity) => {
     if (newQuantity < 1) return; // Evitar cantidades negativas
-  
+
     try {
       // Actualizar la cantidad en la base de datos
       const email = localStorage.getItem("email");
@@ -49,12 +49,12 @@ const Cart = () => {
         itemId: id,
         newQuantity,
       });
-  
+
       // Actualizar el estado local
       const updatedCart = cartItems.map((item) =>
         item.id === id ? { ...item, quantity: newQuantity } : item
       );
-      setCartItems(updatedCart);
+      setCartItems(updatedCart); // Esto debería forzar el re-renderizado
     } catch (error) {
       console.error("Error al actualizar la cantidad", error);
     }
@@ -67,7 +67,7 @@ const Cart = () => {
       await axios.delete(`http://localhost:5000/api/cart/remove-item`, {
         data: { email, itemId: id },
       });
-  
+
       // Actualizar el estado local
       const updatedCart = cartItems.filter((item) => item.id !== id);
       setCartItems(updatedCart);
@@ -124,19 +124,20 @@ const Cart = () => {
               ))}
             </div>
 
+            {/* Resumen de la compra */}
             <div style={styles.summaryContainer}>
               <h2 style={styles.summaryTitle}>Resumen de la compra</h2>
               <div style={styles.summaryRow}>
                 <span>Subtotal</span>
-                <span>${calculateSubtotal()}</span>
+                <span>${subtotal}</span>
               </div>
               <div style={styles.summaryRow}>
                 <span>Impuestos (16%)</span>
-                <span>${calculateTax()}</span>
+                <span>${tax}</span>
               </div>
               <div style={styles.summaryRow}>
                 <strong>Total</strong>
-                <strong>${calculateTotal()}</strong>
+                <strong>${total}</strong>
               </div>
               <button style={styles.checkoutButton}>Pagar ahora</button>
             </div>
@@ -155,16 +156,16 @@ const styles = {
     minHeight: "100vh",
     backgroundColor: "#f9f9f9",
     fontFamily: "Arial, sans-serif",
-    padding: "0", // Eliminamos el padding para que no haya márgenes no deseados
-    margin: "0", // Eliminamos el margen para que no haya espacios no deseados
-    width: "100vw", // Ocupa el 100% del ancho de la pantalla
-    overflowX: "hidden", // Evita el desbordamiento horizontal
+    padding: "0",
+    margin: "0",
+    width: "100vw",
+    overflowX: "hidden",
   },
   content: {
     width: "100%",
     maxWidth: "1200px",
     textAlign: "center",
-    padding: "20px", // Añadimos un padding interno para que el contenido no toque los bordes
+    padding: "20px",
   },
   title: { fontSize: "2rem", marginBottom: "20px", color: "#333" },
   backButton: {
@@ -219,7 +220,7 @@ const styles = {
     borderRadius: "5px",
     fontSize: "1rem",
   },
-  quantity: { fontSize: "1rem", fontWeight: "bold", color: "black"},
+  quantity: { fontSize: "1rem", fontWeight: "bold", color: "black" },
   itemSubtotal: { fontSize: "1rem", margin: "0 0 10px 0", color: "#555" },
   removeButton: {
     padding: "5px 10px",
