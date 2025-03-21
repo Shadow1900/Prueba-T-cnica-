@@ -56,6 +56,15 @@ const Store = () => {
     }
   };
 
+  const handleLogout = () => {
+    // Borrar el localStorage
+    localStorage.removeItem("email");
+    localStorage.removeItem("token");
+
+    // Redirigir a la ruta principal
+    navigate("/");
+  };
+
   const paginatedPokemons = pokemons.slice(
     currentPage * pokemonsPerPage,
     (currentPage + 1) * pokemonsPerPage
@@ -67,12 +76,12 @@ const Store = () => {
       <div style={styles.topBar}>
         <h1 style={styles.title}>Tienda de Pokémon</h1>
         <div style={styles.cartSection}>
-          <span style={styles.cartIcon}>🛒</span>
           <button style={styles.cartButton} onClick={() => navigate("/cart")}>
-          🛒 Ver Carrito
+            🛒 Ver Carrito
           </button>
-
-          <span style={styles.cartCount}>{cart.length}</span>
+          <button style={styles.logoutButton} onClick={handleLogout}>
+            Cerrar sesión
+          </button>
         </div>
       </div>
 
@@ -160,6 +169,17 @@ const styles = {
     fontSize: "1.2rem",
     fontWeight: "bold",
   },
+  logoutButton: {
+    padding: "10px 20px",
+    borderRadius: "5px",
+    border: "none",
+    backgroundColor: "#ff4d4d",
+    color: "#ffffff",
+    fontSize: "1rem",
+    fontWeight: "bold",
+    cursor: "pointer",
+    transition: "background-color 0.3s ease",
+  },
   grid: {
     flex: "1",
     display: "grid",
@@ -234,8 +254,6 @@ const styles = {
     fontSize: "1.2rem",
     fontWeight: "bold",
   },
-  
-  
 };
 
 export default Store;

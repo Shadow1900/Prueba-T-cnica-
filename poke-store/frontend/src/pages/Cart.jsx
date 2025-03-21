@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
   const navigate = useNavigate();
@@ -37,17 +38,42 @@ const Cart = () => {
     return (parseFloat(calculateSubtotal()) + parseFloat(calculateTax())).toFixed(2);
   };
 
-  const handleQuantityChange = (id, newQuantity) => {
+  const handleQuantityChange = async (id, newQuantity) => {
     if (newQuantity < 1) return; // Evitar cantidades negativas
-    const updatedCart = cartItems.map((item) =>
-      item.id === id ? { ...item, quantity: newQuantity } : item
-    );
-    setCartItems(updatedCart);
+  
+    try {
+      // Actualizar la cantidad en la base de datos
+      const email = localStorage.getItem("email");
+      await axios.put(`http://localhost:5000/api/cart/update-quantity`, {
+        email,
+        itemId: id,
+        newQuantity,
+      });
+  
+      // Actualizar el estado local
+      const updatedCart = cartItems.map((item) =>
+        item.id === id ? { ...item, quantity: newQuantity } : item
+      );
+      setCartItems(updatedCart);
+    } catch (error) {
+      console.error("Error al actualizar la cantidad", error);
+    }
   };
 
-  const handleRemoveItem = (id) => {
-    const updatedCart = cartItems.filter((item) => item.id !== id);
-    setCartItems(updatedCart);
+  const handleRemoveItem = async (id) => {
+    try {
+      // Eliminar el ítem de la base de datos
+      const email = localStorage.getItem("email");
+      await axios.delete(`http://localhost:5000/api/cart/remove-item`, {
+        data: { email, itemId: id },
+      });
+  
+      // Actualizar el estado local
+      const updatedCart = cartItems.filter((item) => item.id !== id);
+      setCartItems(updatedCart);
+    } catch (error) {
+      console.error("Error al eliminar el ítem", error);
+    }
   };
 
   return (
@@ -193,7 +219,7 @@ const styles = {
     borderRadius: "5px",
     fontSize: "1rem",
   },
-  quantity: { fontSize: "1rem", fontWeight: "bold" },
+  quantity: { fontSize: "1rem", fontWeight: "bold", color: "black"},
   itemSubtotal: { fontSize: "1rem", margin: "0 0 10px 0", color: "#555" },
   removeButton: {
     padding: "5px 10px",
