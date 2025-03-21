@@ -1,0 +1,52 @@
+Resumen del Proyecto
+Este proyecto fue desarrollado como parte del proceso de prueba técnica para la empresa AppQuantika. Consiste en la creación de un e-commerce funcional que utiliza una API externa para obtener la información de los productos (en este caso, la API de Pokémon). El objetivo principal fue demostrar habilidades en el desarrollo full-stack, integrando tecnologías modernas y buenas prácticas de programación.
+
+El sistema permite a los usuarios:
+
+Registrarse e iniciar sesión con autenticación segura.
+
+Explorar un catálogo de productos (Pokémon) con paginación.
+
+Agregar productos al carrito y gestionar las cantidades.
+
+Realizar una simulación de compra con la generación de un ticket en formato PDF.
+
+Visualizar un resumen de la compra con cálculos de subtotal, impuestos y total.
+
+El proyecto está diseñado para ser escalable, modular y fácil de mantener, siguiendo las mejores prácticas de desarrollo.
+
+Tecnologías Utilizadas
+Frontend
+React: Biblioteca de JavaScript para construir interfaces de usuario interactivas y dinámicas.
+
+React Router: Para la gestión de rutas y navegación dentro de la aplicación.
+
+Axios: Librería para realizar peticiones HTTP a la API del backend.
+
+jsPDF: Para la generación de tickets en formato PDF.
+
+CSS: Para el diseño y estilizado de la interfaz de usuario.
+
+Backend
+Node.js: Entorno de ejecución de JavaScript en el servidor.
+
+Express.js: Framework para construir APIs RESTful y manejar solicitudes HTTP.
+
+MySQL: Sistema de gestión de bases de datos relacionales para almacenar información de usuarios y carritos.
+
+mysql2/promise: Librería que permite trabajar con MySQL usando promesas, mejorando la legibilidad del código.
+
+CORS: Middleware para permitir el acceso a recursos entre diferentes dominios (Cross-Origin Resource Sharing).
+
+dotenv: Para gestionar variables de entorno de manera segura, como credenciales de la base de datos y claves secretas.
+
+bcryptjs: Librería para el cifrado seguro de contraseñas usando el algoritmo bcrypt.
+
+jsonwebtoken (JWT): Para la generación y verificación de tokens de autenticación, asegurando un sistema de autenticación y autorización robusto.
+
+API Externa
+PokeAPI: API pública que proporciona información detallada sobre Pokémon, utilizada como fuente de datos para los productos del e-commerce.
+
+Para poder intalar se baja del repositorio de git luego se ubica en la carptea de frontend y se debe poner npm i para inmtalar todas las dependicas depues se ejecuta npm run dev para ejecutar el programa lo mismo para el back end nos ubicamos en su carpeta y usamos el mismo comando npm run dev
+
+Para la base de datos nada mas hay que importar el archivo que se encunentra en la carpeta de Base de datos y por ultimo nada mas seria asegurarse que los puertos donde se ejecuta el servicio de la base de datos si sean los mismo o sino se deben modificar para que el node.js pueda encontar la base de datos,
